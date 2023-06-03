@@ -1,6 +1,8 @@
 
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow,Tray  } = require('electron');
 const { autoUpdater } = require('electron-updater');
+const path = require('path')
+
 
 console.log('Hello from Electron')
 
@@ -8,15 +10,15 @@ let mainWindow;
 
 function createWindow() {
     mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 1000,
+        height: 700,
         webPreferences: {
             nodeIntegration: false, // 禁用node.js集成，以增强安全性
             contextIsolation: true, // 启用上下文隔离，以增强安全性
             enableRemoteModule: false // 禁用remote模块，以增强安全性
         }
     });
-
+    const tray = new Tray(path.join(__dirname, '../assets/icon.ico'))
     // 加载网站
     mainWindow.loadURL('http://172.31.86.192:4399/');
 
