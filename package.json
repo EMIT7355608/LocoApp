@@ -1,0 +1,14 @@
+{
+  "name": "locoapp",
+  "version": "1.0.0",
+  "description": "App for LocoNJU using electron.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tilt",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^25.0.1"
+  }
+}
