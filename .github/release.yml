@@ -1,18 +1,17 @@
-changelog:
-  exclude:
-    labels:
-      - ignore-for-release
-    authors:
-      - tilt
-  categories:
-    - title: Breaking Changes 🛠
-      labels:
-        - Semver-Major
-        - breaking-change
-    - title: Exciting New Features 🎉
-      labels:
-        - Semver-Minor
-        - enhancement
-    - title: Other Changes
-      labels:
-        - "*"
+name: Create latest.yml
+on:
+  release:
+    types: [published]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Create latest.yml
+        uses: actions/create-release-asset@v1.0.0
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./*.exe
+          asset_name: latest.yml
+          asset_content_type: application/x-yaml
