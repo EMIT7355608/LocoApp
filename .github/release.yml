@@ -9,7 +9,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Create latest.yml
-        uses: actions/create-release-asset@v1.0.0
+        uses: actions/create-release-asset
         with:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: ./*.exe
