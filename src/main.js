@@ -3,12 +3,12 @@ const { app, BrowserWindow,Tray  } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const path = require('path')
 
-
 console.log('Hello from Electron')
 
 let mainWindow;
 
 function createWindow() {
+    process.env.GITHUB_TOKEN = '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';
     mainWindow = new BrowserWindow({
         width: 1000,
         height: 700,
