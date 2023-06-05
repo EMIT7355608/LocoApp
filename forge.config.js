@@ -16,7 +16,7 @@ module.exports = {
       name: "@electron-forge/maker-squirrel",
       config: {
         name: "LocoApp",
-        setupIcon: "build/installerIcon.ico",
+        setupIcon: "./build/installerIcon.ico",
         loadingGif: "assets/load.gif",
         shortcutFolders: ["$DESKTOP", "$START_MENU\\Programs\\MyApp"],
         allowToChangeInstallationDirectory: true

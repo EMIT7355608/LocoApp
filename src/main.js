@@ -121,14 +121,6 @@ function configureAutoUpdater() {
           if (returnValue.response === 0) autoUpdater.quitAndInstall()
         })
       })
-    autoUpdater.on('update-not-available', () => {
-        // 向渲染进程发送消息，通知用户当前已经是最新版本
-        const index = dialog.showMessageBoxSync({
-          type: 'question',
-          buttons: ['Yes', 'No'],
-          message:'update-not-available'
-          });
-      });
     // 监听自动更新错误事件
     autoUpdater.on('error', (error) => {
         console.error(error)
