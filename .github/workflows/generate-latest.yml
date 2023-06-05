@@ -1,0 +1,16 @@
+name: Generate latest.yml
+on:
+  release:
+    types: [published]
+jobs:
+  update-latest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Generate latest.yml
+        uses: actions/create-release-asset@latest
+        with:
+          asset_path: ./*.exe
+          asset_name: latest.yml
+          asset_content_type: application/x-yaml

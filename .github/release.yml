@@ -1,0 +1,17 @@
+name: Create latest.yml
+on:
+  release:
+    types: [published]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Create latest.yml
+        uses: actions/create-release-asset
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./*.exe
+          asset_name: latest.yml
+          asset_content_type: application/x-yaml
