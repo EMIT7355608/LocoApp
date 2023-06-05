@@ -1,16 +1,19 @@
 {
   "name": "locoapp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "App for LocoNJU.",
   "main": "src/main.js",
   "scripts": {
     "make": "electron-forge make",
     "start": "electron-forge start",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "package": "electron-forge package"
+    "package": "electron-forge package",
+    "publish": "electron-forge publish"
   },
   "author": "Tilt",
   "license": "MIT",
+  "id": "locoapp",
+  "releaseNotes": "Initial release",
   "devDependencies": {
     "@electron-forge/cli": "^6.1.1",
     "@electron-forge/maker-deb": "^6.1.1",
@@ -18,10 +21,18 @@
     "@electron-forge/maker-squirrel": "^6.1.1",
     "@electron-forge/maker-wix": "^6.1.1",
     "@electron-forge/maker-zip": "^6.1.1",
+    "@electron-forge/publisher-github": "^6.1.1",
     "electron": "^25.0.1",
     "electron-prebuilt-compile": "8.2.0",
-    "electron-squirrel-startup": "^1.0.0",
-    "electron-wix-msi": "^5.0.0"
+    "electron-wix-msi": "^5.0.0",
+    "squirrelly": "^9.0.0"
+  },
+  "publish": {
+    "provider": "github",
+    "owner": "EMIT7355608",
+    "repo": "LocoApp",
+    "private": false,
+    "draft": true
   },
   "build": {
     "appId": "com.tilt.locoapp",
@@ -33,16 +44,35 @@
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true
-    }
+    },
+    "provider": "github",
+    "owner": "EMIT7355608",
+    "repo": "LocoApp",
+    "releaseType": "draft"
   },
   "dependencies": {
     "electron-compile": "^6.4.4",
-    "electron-updater": "^5.3.0"
+    "electron-releases": "^3.1171.0",
+    "electron-squirrel-startup": "^1.0.0",
+    "electron-updater": "^5.3.0",
+    "windows-shortcuts": "^0.1.6"
   },
   "config": {
-    "forge": "./forge.config.js",
-    "electronForge": {
-      "npmRegistry": "https://registry.npmjs.org/electron-forge"
-    }
+    "forge": "./forge.config.js"
+  },
+  "electronForge": {
+    "makers": [
+      {
+        "name": "@electron-forge/maker-squirrel",
+        "config": {
+          "name": "LocoApp",
+          "authors": "tilt",
+          "noMsi": true,
+          "remoteReleases": "https://github.com/EMIT7355608/LocoApp/releases",
+          "useAppId": true,
+          "generateUpdatesFilesForAllChannels": true
+        }
+      }
+    ]
   }
 }

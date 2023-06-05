@@ -1,14 +1,19 @@
 
-const { app, BrowserWindow,Tray  } = require('electron');
-const { autoUpdater } = require('electron-updater');
-const path = require('path')
+const { app, autoUpdater, BrowserWindow,Tray,dialog  } = require('electron');
+const path = require('path');
+const squirrelStartup = require('electron-squirrel-startup');
+console.log('Hello from Electron');
 
-console.log('Hello from Electron')
+if (squirrelStartup) {
+    app.quit();
+}
 
 let mainWindow;
 
+process.env.GITHUB_TOKEN = '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';
+configureAutoUpdater()
+
 function createWindow() {
-    process.env.GITHUB_TOKEN = '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';
     mainWindow = new BrowserWindow({
         width: 1000,
         height: 700,
@@ -22,6 +27,8 @@ function createWindow() {
     // 加载网站
     mainWindow.loadURL('http://172.31.86.192:4399/');
 
+    autoUpdater.checkForUpdates();
+    // 检查更新
     // 打开开发者工具
     //mainWindow.webContents.openDevTools();
 
@@ -29,31 +36,9 @@ function createWindow() {
     mainWindow.on('closed', function () {
         mainWindow = null;
     });
-    // 检查更新
-    configureAutoUpdater()
-    autoUpdater.checkForUpdatesAndNotify();
-
 }
 
 app.on('ready', createWindow);
-
-// 监听自动更新事件
-autoUpdater.on('update-available', () => {
-    console.log('Update available');
-});
-
-autoUpdater.on('update-not-available', () => {
-    console.log('No update available');
-});
-
-autoUpdater.on('error', (err) => {
-    console.error('Error while checking for updates', err);
-});
-
-autoUpdater.on('update-downloaded', (info) => {
-    console.log('Update downloaded', info);
-    autoUpdater.quitAndInstall();
-});
 
 // 在所有窗口关闭时退出应用程序
 app.on('window-all-closed', function () {
@@ -70,22 +55,31 @@ app.on('activate', function () {
 
 
 function configureAutoUpdater() {
+    /**/
+    autoUpdater.setFeedURL({
+        
+    url: 'https://github.com/EMIT7355608/LocoApp/releases/latest/download'
+    })
+ /*
     // 设置更新源的URL
     autoUpdater.setFeedURL({
         provider: 'github',
         owner: 'EMIT7355608',
         repo: 'LocoApp',
+        releaseType: 'release',
+        private: false,
         // 如果您的应用程序为预发布版本，请在此处设置预发布标签
         // prerelease: true,
     })
 
     // 监听更新可用事件
+    
     autoUpdater.on('update-available', (info) => {
         const message = `A new version (${info.version}) is available. Do you want to download it now?`
         const index = dialog.showMessageBoxSync({
             type: 'question',
-            buttons: ['Yes', 'No'],
             message,
+            buttons: ['Yes', 'No'],
         })
         if (index === 0) {
             autoUpdater.downloadUpdate()
@@ -112,8 +106,29 @@ function configureAutoUpdater() {
         if (index === 0) {
             autoUpdater.quitAndInstall()
         }
-    })
-
+    }) */
+    autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
+        const dialogOpts = {
+          type: 'info',
+          buttons: ['重启', '稍后'],
+          title: '应用程序更新',
+          message: process.platform === 'win32' ? releaseNotes : releaseName,
+          detail:
+            '已经下载了新版本，是否重启应用程序以应用更新？'
+        }
+      
+        dialog.showMessageBox(dialogOpts).then((returnValue) => {
+          if (returnValue.response === 0) autoUpdater.quitAndInstall()
+        })
+      })
+    autoUpdater.on('update-not-available', () => {
+        // 向渲染进程发送消息，通知用户当前已经是最新版本
+        const index = dialog.showMessageBoxSync({
+          type: 'question',
+          buttons: ['Yes', 'No'],
+          message:'update-not-available'
+          });
+      });
     // 监听自动更新错误事件
     autoUpdater.on('error', (error) => {
         console.error(error)
